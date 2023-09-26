@@ -151,4 +151,37 @@ RSpec.describe Auction do
       })
     end
   end
+
+  describe '#date' do
+    it 'can return the date in which the object was created' do
+      expect(@auction.date).to be_a(String)
+      allow(Date).to receive(:today).and_return(Date.new(2000, 1, 1))
+      auction = Auction.new
+      expect(auction.date).to be_a(String)
+      expect(auction.date).to eq('01/01/2000')
+    end
+  end
+
+  # describe '#close_auction' do
+  #   it 'can close the auction and sell all items as bid on, if possible' do
+  #     @auction.add_item(@item1)
+  #     @auction.add_item(@item2)
+  #     @auction.add_item(@item3)
+  #     @auction.add_item(@item4)
+  #     @auction.add_item(@item5)
+  #     @item1.add_bid(@attendee2, 20)
+  #     @item1.add_bid(@attendee1, 22)
+  #     @item4.add_bid(@attendee3, 70)
+  #     @item3.add_bid(@attendee2, 15)
+  #     @item3.add_bid(@attendee3, 50)
+  #     expect(@auction.close_auction).to eq({
+  #       @item1 => @attendee1,
+  #       @item2 => 'Not Sold',
+  #       @item3 => @attendee2,
+  #       @item4 => @attendee3,
+  #       @item5 => 'Not Sold'
+  #     })
+  #   end
+  # end
+
 end

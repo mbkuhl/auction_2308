@@ -17,7 +17,18 @@ class Item
   end
 
   def current_high_bid
+    return 0 if @bids == {}
     @bids.values.sort { |bid| bid }.first
+  end
+  
+  def current_high_bid_with_attendee
+    @bids.sort_by { |attendee, bid| bid }.last
+  end
+
+  def remove_highest_bid
+    require 'pry'; binding.pry
+
+    @bids[current_high_bid_with_attendee[0]] = 0
   end
 
   def close_bidding

@@ -1,9 +1,10 @@
 class Auction
 
-  attr_reader :items
+  attr_reader :items, :date
 
   def initialize
     @items = []
+    @date = Date.today.strftime("%d/%m/%Y")
   end
 
   def add_item(item)
@@ -49,5 +50,38 @@ class Auction
     attendee_hash[:budget] = bidder.budget
     attendee_hash[:items] = bidder.items
     attendee_hash
+  end
+
+  def close_auction
+    close_hash = {}
+
+    items_sorted_by_highest_bid.each do |item|
+      close_hash[item] = sell_item(item)
+    end
+    close_hash
+  end
+
+  def sell_item(item)
+    return "Not Sold" if item.current_high_bid_with_attendee.nil? # || item.current_high_bid_with_attendee == []
+    best_bidder_budget = item.current_high_bid_with_attendee[0].budget
+    best_bid = item.current_high_bid
+    until best_bidder_budget > best_bid || best_bid == 0
+      item.remove_highest_bid
+      best_bidder_budget = item.current_high_bid_with_attendee[0].budget
+      best_bid = item.current_high_bid
+    end
+    if item.current_high_bid == 0
+      "Not Sold"
+    else
+      sold_to = item.current_high_bid_with_attendee[0]
+      item.current_high_bid_with_attendee[0].budget -= item.current_high_bid
+      sold_to
+    end
+  end
+
+  def items_sorted_by_highest_bid
+    @items.sort_by do |item| 
+      item.current_high_bid
+    end.reverse
   end
 end
