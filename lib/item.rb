@@ -27,7 +27,7 @@ class Item
 
   def remove_highest_bid
 
-    @bids[current_high_bid_with_attendee[0]] = 0
+    @bids.delete(current_high_bid_with_attendee[0])
   end
 
   def close_bidding
