@@ -39,6 +39,16 @@ RSpec.describe Item do
   end
 
   describe '#close_bidding' do
-
+    it 'will not allow additional bids on an item' do
+      @item1.add_bid(@attendee2, 20)
+      expect(@item1.bids).to eq({
+        @attendee2 => 20
+      })
+      expect(@item1.close_bidding).to eq("Bids are now closed")
+      @item1.add_bid(@attendee1, 22)
+      expect(@item1.bids).to eq({
+        @attendee2 => 20,
+      })
+    end
   end
 end
