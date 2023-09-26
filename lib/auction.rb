@@ -28,4 +28,12 @@ class Auction
     end.sum
   end
 
+  def bidders
+    @items.flat_map do |item| 
+      item.bids.keys.map { |bidder| bidder.name }
+    end.uniq
+  end
+
+  def bidder_info
+    
 end

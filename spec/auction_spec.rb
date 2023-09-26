@@ -73,4 +73,82 @@ RSpec.describe Auction do
       expect(@auction.potential_revenue).to eq(87)
     end
   end
+
+  describe '#bidders' do
+    it 'can return a list of all bidders who have place a bid on an item' do
+      @auction.add_item(@item1)
+      @auction.add_item(@item2)
+      @auction.add_item(@item3)
+      @auction.add_item(@item4)
+      @auction.add_item(@item5)
+      expect(@auction.bidders).to eq([])
+      @item1.add_bid(@attendee2, 20)
+      expect(@auction.bidders).to eq([@attendee2.name])
+      @item1.add_bid(@attendee1, 22)
+      expect(@auction.bidders.sort).to eq([@attendee2.name, @attendee1.name].sort)
+      @item4.add_bid(@attendee3, 50)
+      expect(@auction.bidders.sort).to eq([@attendee2.name, @attendee1.name, @attendee3.name].sort)
+      @item3.add_bid(@attendee2, 15)
+      expect(@auction.bidders.sort).to eq([@attendee2.name, @attendee1.name, @attendee3.name].sort)
+    end
+  end
+
+  describe '#bidder_info' do
+    it 'can return an hash of attendee information, displayed as a hash' do
+      @auction.add_item(@item1)
+      @auction.add_item(@item2)
+      @auction.add_item(@item3)
+      @auction.add_item(@item4)
+      @auction.add_item(@item5)
+      expect(@auction.bidder_info).to eq({})
+      @item1.add_bid(@attendee2, 20)
+      expect(@auction.bidder_info).to eq({
+        @attendee2 => {
+          budget: 75,
+          items: [item1]
+        }
+      })
+      @item1.add_bid(@attendee1, 22)
+      expect(@auction.bidder_info).to eq({
+        @attendee2 => {
+          budget: 75,
+          items: [item1]
+        },
+        @attendee1 => {
+          budget: 50,
+          items: [item1]
+        },
+        })
+        @item4.add_bid(@attendee3, 50)
+      expect(@auction.bidder_info).to eq({
+        @attendee2 => {
+          budget: 75,
+          items: [item1]
+        },
+        @attendee1 => {
+          budget: 50,
+          items: [item1]
+        },
+        @attendee3 => {
+          budget: 100,
+          items: [item4]
+        },
+      })
+      @item3.add_bid(@attendee2, 15)
+      expect(@auction.bidder_info).to eq({
+        @attendee2 => {
+          budget: 75,
+          items: [item1]
+        },
+        @attendee1 => {
+          budget: 50,
+          items: [item1, item3]
+        },
+        @attendee3 => {
+          budget: 100,
+          items: [item4]
+        },
+      })
+    end
+  end
 end

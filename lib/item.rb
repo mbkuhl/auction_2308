@@ -13,4 +13,6 @@ class Item
   def current_high_bid
     @bids.values.sort { |bid| bid }.first
   end
+
+  
 end
