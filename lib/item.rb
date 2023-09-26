@@ -26,7 +26,6 @@ class Item
   end
 
   def remove_highest_bid
-    require 'pry'; binding.pry
 
     @bids[current_high_bid_with_attendee[0]] = 0
   end

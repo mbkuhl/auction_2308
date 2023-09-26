@@ -6,6 +6,7 @@ RSpec.describe Item do
     @item2 = Item.new('Bamboo Picture Frame')
     @attendee1 = Attendee.new({name: 'Megan', budget: '$50'})
     @attendee2 = Attendee.new({name: 'Bob', budget: '$75'})
+    @attendee3 = Attendee.new({name: 'Mike', budget: '$100'})
   end
   describe '#initialize' do
     it 'can initialize' do
@@ -34,7 +35,8 @@ RSpec.describe Item do
     it 'can give the current highest bid' do
       @item1.add_bid(@attendee2, 20)
       @item1.add_bid(@attendee1, 22)
-      expect(@item1.current_high_bid).to eq(22)
+      @item1.add_bid(@attendee3, 50)
+      expect(@item1.current_high_bid).to eq(50)
     end
   end
 
